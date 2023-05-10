@@ -39,16 +39,16 @@ namespace AiVisualisation
         public void StartGame()
         {
             
-            Console.WriteLine("Welcome to the Roomba game");
-            Console.WriteLine("Press W to move up");
-            Console.WriteLine("Press S to move down");
-            Console.WriteLine("Press D to move to the right");
-            Console.WriteLine("Press A to move to the lef");
-            Console.WriteLine("Press C to exit");
+            
             char inputChar = ' ';
             while (inputChar != 'c')
             {
-                Console.Clear();
+                Console.WriteLine("Welcome to the Roomba game");
+                Console.WriteLine("Press W to move up");
+                Console.WriteLine("Press S to move down");
+                Console.WriteLine("Press D to move to the right");
+                Console.WriteLine("Press A to move to the lef");
+                Console.WriteLine("Press C to exit");
                 DaddyGrid.VisualizeGrid();
 
                 try
@@ -59,13 +59,14 @@ namespace AiVisualisation
                 {
                     Console.WriteLine("Input a valid character!");
                     Roomba.HandleInput(Console.ReadLine().ToCharArray()[0]);
-                }    
+                }
+                Console.Clear();
             }
         }
 
         public void CreateRoomba()
         {
-            Roomba = new Roomba(DaddyGrid, 1,1);
+            Roomba = new Roomba(DaddyGrid, 0,0);
         }
     }
 }
