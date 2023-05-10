@@ -17,5 +17,10 @@ namespace AiVisualisation
             this.IsInteractable = isInteractable; 
             this.Name = name;
         }
+
+        public char GetChar()
+        {
+            return this.Name[0];
+        }
     }
 }

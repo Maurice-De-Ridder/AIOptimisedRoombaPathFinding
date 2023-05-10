@@ -19,6 +19,16 @@ namespace AiVisualisation
                 for (int y = 0; y < Columns.GetLength(1); y++)
                 {
                     Columns[i, y] = new GridObject("o", true);
+                }
+            }
+        }
+
+        public void VisualizeGrid()
+        {
+            for (int i = 0; i < Columns.GetLength(0); i++)
+            {
+                for (int y = 0; y < Columns.GetLength(1); y++)
+                {
                     Console.Write(Columns[i, y].Name + " ");
                 }
                 Console.WriteLine();

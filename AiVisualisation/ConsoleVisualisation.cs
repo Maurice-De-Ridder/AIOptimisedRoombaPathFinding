@@ -15,7 +15,7 @@ namespace AiVisualisation
             Grid grid = new Grid();
             // mijn kamer dimensies
             grid.InstantiateGrid(10, 20);
-            
+            grid.VisualizeGrid();
 
             // create objects
 
