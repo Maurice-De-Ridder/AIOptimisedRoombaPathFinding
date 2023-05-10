@@ -25,8 +25,6 @@ namespace AiVisualisation
 
         public bool InsertObject(GridObject gridObject, int x, int y, int width, int length)
         {
-
-
             try
             {
                 for (int i = 0; i < length; i++)
