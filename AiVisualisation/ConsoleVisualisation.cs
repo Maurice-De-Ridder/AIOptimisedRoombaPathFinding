@@ -8,19 +8,35 @@ namespace AiVisualisation
 {
     public class ConsoleVisualisation
     {
+        private Grid DaddyGrid;
         public void start()
         {
+
+            CreateConsole();
+            CreateObjects();
+            StartGame();
+        }
+
+        public void CreateConsole()
+        {
             // create console
-
-            Grid grid = new Grid();
+            DaddyGrid = new Grid();
             // mijn kamer dimensies
-            grid.InstantiateGrid(10, 20);
-            grid.VisualizeGrid();
+            DaddyGrid.InstantiateGrid(15, 15);
+        }
 
+        public void CreateObjects()
+        {
             // create objects
+            ObjectGod og = new ObjectGod(DaddyGrid);
+            og.InsertObject("Plant", 2, 2);
+            og.InsertObject("Plant", 2, 2);
+            og.InsertObject("Sofa", 6, 2);
+        }
 
-            
-            // start game 
+        public void StartGame()
+        {
+            DaddyGrid.VisualizeGrid();
         }
     }
 }

@@ -23,13 +23,46 @@ namespace AiVisualisation
             }
         }
 
+        public bool InsertObject(GridObject gridObject, int x, int y, int width, int length)
+        {
+
+            for (int i = 0; i < length; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    if (Columns[i, j].GetChar() != 'o')
+                    {
+                        return false;
+                    }
+                }
+            }
+            try
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        Columns[x+i, y+j] = gridObject;
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                // will throw exception if the random gen is out of bounds
+                return false;
+            }
+           
+        }
+
         public void VisualizeGrid()
         {
             for (int i = 0; i < Columns.GetLength(0); i++)
             {
                 for (int y = 0; y < Columns.GetLength(1); y++)
                 {
-                    Console.Write(Columns[i, y].Name + " ");
+                    Console.Write(Columns[i, y].GetChar() + " ");
                 }
                 Console.WriteLine();
             }
