@@ -50,6 +50,7 @@ namespace AiVisualisation
                 Console.WriteLine("Press A to move to the lef");
                 Console.WriteLine("Press C to exit");
                 DaddyGrid.VisualizeGrid();
+                Console.WriteLine("You have cleared " + DaddyGrid.CalculateTileAmount('C') + " tiles out of the " + DaddyGrid.CalculateTileAmount('o') + " dirty tiles" );
 
                 try
                 {
@@ -60,6 +61,7 @@ namespace AiVisualisation
                     Console.WriteLine("Input a valid character!");
                     Roomba.HandleInput(Console.ReadLine().ToCharArray()[0]);
                 }
+
                 Console.Clear();
             }
         }

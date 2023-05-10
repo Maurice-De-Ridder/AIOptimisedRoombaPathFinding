@@ -67,5 +67,24 @@ namespace AiVisualisation
                 Console.WriteLine();
             }
         }
+
+        public int CalculateTileAmount(char charToCalculate)
+        {
+            int counter = 0;
+
+            for (int i = 0; i < Columns.GetLength(0); i++)
+            {
+                for (int y = 0; y < Columns.GetLength(1); y++)
+                {
+                    if (Columns[i, y].GetChar() == charToCalculate)
+                    {
+                        counter++;
+                    }
+                }
+            }
+
+            return counter;
+        }
+
     }
 }
