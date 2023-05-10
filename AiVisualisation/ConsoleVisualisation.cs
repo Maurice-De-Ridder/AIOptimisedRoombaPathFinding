@@ -11,7 +11,15 @@ namespace AiVisualisation
         public void start()
         {
             // create console
+
+            Grid grid = new Grid();
+            // mijn kamer dimensies
+            grid.InstantiateGrid(10, 20);
+            
+
             // create objects
+
+            
             // start game 
         }
     }
