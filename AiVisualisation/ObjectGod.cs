@@ -32,7 +32,7 @@ namespace AiVisualisation
         }
         public (int,int) SwapOrientation(int width,int length)
         {
-            if (rnd.Next(1) == 0)
+            if (rnd.Next(2) == 0)
             {
                 int oldWidth = width;
                 width = length;

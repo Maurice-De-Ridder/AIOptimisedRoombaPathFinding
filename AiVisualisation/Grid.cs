@@ -26,18 +26,20 @@ namespace AiVisualisation
         public bool InsertObject(GridObject gridObject, int x, int y, int width, int length)
         {
 
-            for (int i = 0; i < length; i++)
-            {
-                for (int j = 0; j < width; j++)
-                {
-                    if (Columns[i, j].GetChar() != 'o')
-                    {
-                        return false;
-                    }
-                }
-            }
+
             try
             {
+                for (int i = 0; i < length; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        if (Columns[x + i, x + j].GetChar() != 'o')
+                        {
+                            return false;
+                        }
+                    }
+                }
+
                 for (int i = 0; i < length; i++)
                 {
                     for (int j = 0; j < width; j++)
