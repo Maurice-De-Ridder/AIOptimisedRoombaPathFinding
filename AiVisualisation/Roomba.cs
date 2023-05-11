@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace AiVisualisation
 {
     public class Roomba
     {
-        private int XLoc;
-        private int YLoc;
+        public int XLoc;
+        public int YLoc;
         private Grid DaddyGrid;
         public GridObject roomba = new GridObject("Roomba", false);
-        public Roomba(Grid grid,int xLoc, int yLoc)
+        public Roomba(Grid grid)
         {
             DaddyGrid = grid;
-            XLoc = xLoc; 
-            YLoc = yLoc;
-            DaddyGrid.Columns[XLoc, YLoc] = roomba;
+            (YLoc, XLoc) = DaddyGrid.FindBase();
+          
         }
         public void HandleInput(char input)
         {
@@ -43,14 +43,22 @@ namespace AiVisualisation
         }
         public void TraverseGrid(int xIncr, int yIncr)
         {
+     
+            Regex rx = new Regex(@"C|c|O|o");
             // check if the traverse is possible
-            if (DaddyGrid.Columns[YLoc+yIncr,XLoc+xIncr].GetChar() == 'o')
+            if (rx.IsMatch(DaddyGrid.Columns[YLoc + yIncr, XLoc + xIncr].GetChar().ToString()))
             {
                
                 // if yes, move the Roomba.
                 DaddyGrid.Columns[YLoc + yIncr, XLoc + xIncr] = roomba;
-                // clean the tile
-                DaddyGrid.Columns[YLoc, XLoc] = new GridObject("Clean", false);
+                
+                //Checks if starting tile
+                if (DaddyGrid.Columns[YLoc,XLoc].GetChar() != 'B')
+                {
+                    // clean the tile
+                    DaddyGrid.Columns[YLoc, XLoc] = new GridObject("Clean", false);
+                }
+
                 // update the internal Roomba location
                 YLoc = YLoc + yIncr;
                 XLoc = XLoc + xIncr;
@@ -60,5 +68,6 @@ namespace AiVisualisation
                 // if no, do nothing
             }
         }
+
     }
 }

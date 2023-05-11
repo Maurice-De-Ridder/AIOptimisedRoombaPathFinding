@@ -31,7 +31,7 @@ namespace AiVisualisation
                 {
                     for (int j = 0; j < width; j++)
                     {
-                        if (Columns[x + i, x + j].GetChar() != 'o')
+                        if (Columns[x + i, y + j].GetChar() != 'o')
                         {
                             return false;
                         }
@@ -55,7 +55,29 @@ namespace AiVisualisation
             }
            
         }
-
+        public (int,int) FindBase()
+        {
+            try
+            {
+                for (int i = 0; i < Columns.GetLength(0); i++)
+                {
+                    for (int j = 0; j < Columns.GetLength(1); j++)
+                    {
+                        if (Columns[i, j].GetChar() == 'B')
+                        {
+                            return (i, j);
+                        }
+                    }
+                }
+                return (0, 0);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return (0, 0);
+            }
+            
+        }
         public void VisualizeGrid()
         {
             for (int i = 0; i < Columns.GetLength(0); i++)

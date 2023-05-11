@@ -30,6 +30,7 @@ namespace AiVisualisation
                 y = rnd.Next(DaddyGrid.Columns.GetLength(1));
             }
         }
+
         public (int,int) SwapOrientation(int width,int length)
         {
             if (rnd.Next(2) == 0)
