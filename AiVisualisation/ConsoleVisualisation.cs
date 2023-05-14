@@ -17,8 +17,11 @@ namespace AiVisualisation
             CreateConsole();
             CreateRoomba();
             CreateObjects();
-            StartGame();
-            ReturnHome();
+            //StartGame();
+            //ReturnHome();
+            StartCleaningDFSAI();
+            //StartCleaningRandomAI();
+            
         }
 
         public void CreateConsole()
@@ -71,15 +74,68 @@ namespace AiVisualisation
 
         }
 
-        public void ReturnHome()
+        public void StartCleaningBFSAI()
+        {
+            DateTime startTime = DateTime.Now;
+            int tilesTraversed = BreadthFirstSearch.BFSCleaningNoEnding(DaddyGrid, Roomba.XLoc, Roomba.YLoc);
+            Console.Clear();
+            DaddyGrid.VisualizeGrid();
+            DateTime endTime = DateTime.Now;
+            TimeSpan totalTime = endTime - startTime;
+
+            int returnTiles = ReturnHome();
+
+            Console.WriteLine("Amount of tiles traversed: " + tilesTraversed);
+            Console.WriteLine("Amount of tiles back to base: " + returnTiles);
+            Console.WriteLine("Total Amount of tiles: " + (returnTiles + tilesTraversed));
+            Console.WriteLine("Amount of seconds for algorithm to run in seconds: " + totalTime.TotalSeconds);
+            Console.WriteLine("Amount of seconds for algorithm to run in Minutes: " + totalTime.TotalMinutes);
+        }
+
+
+        public void StartCleaningRandomAI()
+        {
+            DateTime startTime = DateTime.Now;
+            int tilesTraversed = RandomSearch.RandomCleaningAI(DaddyGrid,Roomba, Roomba.XLoc, Roomba.YLoc);
+            Console.Clear();
+            DaddyGrid.VisualizeGrid();
+            DateTime endTime = DateTime.Now;
+            TimeSpan totalTime = endTime - startTime;
+
+
+            int returnTiles = ReturnHome();
+
+            Console.WriteLine("Amount of tiles traversed: " + tilesTraversed);
+            Console.WriteLine("Amount of tiles back to base: " + returnTiles);
+            Console.WriteLine("Total Amount of tiles: " + (returnTiles + tilesTraversed));
+            Console.WriteLine("Amount of seconds for algorithm to run in seconds: " + totalTime.TotalSeconds);
+            Console.WriteLine("Amount of seconds for algorithm to run in Minutes: " + totalTime.TotalMinutes);
+        }
+
+        public void StartCleaningDFSAI()
+        {
+            DateTime startTime = DateTime.Now;
+            int tilesTraversed = DepthFirstSearch.DFSCleaningAI(DaddyGrid, Roomba, Roomba.XLoc, Roomba.YLoc);
+            Console.Clear();
+            DaddyGrid.VisualizeGrid();
+            DateTime endTime = DateTime.Now;
+            TimeSpan totalTime = endTime - startTime;
+
+            int returnTiles = ReturnHome();
+
+            Console.WriteLine("Amount of tiles traversed: " + tilesTraversed);
+            Console.WriteLine("Amount of tiles back to base: " + returnTiles);
+            Console.WriteLine("Total Amount of tiles: " + (returnTiles + tilesTraversed));
+            Console.WriteLine("Amount of seconds for algorithm to run in seconds: " + totalTime.TotalSeconds);
+            Console.WriteLine("Amount of seconds for algorithm to run in Minutes: " + totalTime.TotalMinutes);
+        }
+
+        public int ReturnHome()
         {
             int EndX, EndY;
             (EndY,EndX) = DaddyGrid.FindBase();
-            Console.WriteLine();
-            Console.WriteLine("Amount of tiles back to base");
-            Console.WriteLine(BreadthFirstSearch.BFS(DaddyGrid,Roomba.XLoc,Roomba.YLoc,EndX,EndY) + " Tiles");
-            
-            DaddyGrid.VisualizeGrid();
+            return BreadthFirstSearch.BFS(DaddyGrid, Roomba.XLoc, Roomba.YLoc, EndX, EndY);
+        
         }
 
         public void CreateRoomba()

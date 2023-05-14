@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace AiVisualisation
 {
@@ -51,7 +46,8 @@ namespace AiVisualisation
                 else
                 {
                     //New GridObject which is a path option the Roomba can take, this is purely for visualization purposes
-                    grid.Columns[current.Column, current.Row] = new GridObject("GoOption", false);
+
+                    //grid.Columns[current.Column, current.Row] = new GridObject("GoOption", false);
                 }
 
                 for (int i = 0; i < Directions.GetLength(0); i++)
@@ -71,6 +67,49 @@ namespace AiVisualisation
             return -1;
         }
 
+
+        public static int BFSCleaningNoEnding(Grid grid, int StartX, int StartY)
+        {
+            int rows = grid.Columns.GetLength(0);
+            int cols = grid.Columns.GetLength(1);
+
+            bool[,] visited = new bool[rows, cols];
+            visited[StartX, StartY] = true;
+
+            int tiles = 0;
+
+            Queue<Node> queue = new Queue<Node>();
+            queue.Enqueue(new Node(StartX, StartY, 0));
+            
+            while (queue.Count > 0)
+            {
+                Console.Clear();
+                Node current = queue.Dequeue();
+                tiles++;
+                grid.VisualizeGrid();
+
+                if (!(current.Row == StartX && current.Column == StartY))
+                {
+                    grid.Columns[current.Column, current.Row] = new GridObject("Clean", false);
+                }
+                for (int i = 0; i < Directions.GetLength(0); i++)
+                {
+                    int newRow = current.Row + Directions[i, 0];
+                    int newCol = current.Column + Directions[i, 1];
+                   
+                    if (IsValidPos(grid, newRow, newCol) && !visited[newRow, newCol])
+                    {
+                        
+                        visited[newRow, newCol] = true;
+                        queue.Enqueue(new Node(newRow, newCol, current.Tiles + 1));
+                    }
+                }
+            }
+            // If the target is unreachable
+            return tiles;
+        }
+
+
         public static bool IsValidPos(Grid grid, int row, int col)
         {
             int rows = grid.Columns.GetLength(0);
@@ -78,7 +117,14 @@ namespace AiVisualisation
 
             Regex rx = new Regex(@"C|c|O|o|X|x|B|b");
 
-            return row >= 0 && row < rows && col >= 0 && col < cols && rx.IsMatch(grid.Columns[col, row].GetChar().ToString());
+            return IsInBounds(grid,row,col) && rx.IsMatch(grid.Columns[col, row].GetChar().ToString());
+        }
+
+        public static bool IsInBounds(Grid grid, int row,int col)
+        {
+            int rows = grid.Columns.GetLength(0);
+            int cols = grid.Columns.GetLength(1);
+            return row >= 0 && row < rows && col >= 0 && col < cols;
         }
     }
 
