@@ -6,9 +6,34 @@ using System.Threading.Tasks;
 
 namespace AiVisualisation
 {
-    public class Grid
+    public class Grid : ICloneable
     {
         public GridObject[,] Columns { get; set; }
+
+        public Grid() { }
+
+        public Grid(GridObject[,] other) 
+        { 
+            Columns = (GridObject[,])other.Clone();
+        }
+
+        public object Clone()
+        {
+            int rows = Columns.GetLength(1);
+            int cols = Columns.GetLength(0);
+
+            GridObject[,] cloneGrid = new GridObject[rows, cols]; 
+
+            for(int i = 0; i < rows;i++)
+            {
+                for(int j = 0; j < cols; j++)
+                {
+                    cloneGrid[i,j] = Columns[i,j];
+                }
+            }
+            return new Grid(cloneGrid);
+        }
+
 
         public void InstantiateGrid(int sizeY, int sizeX)
         {
@@ -19,6 +44,20 @@ namespace AiVisualisation
                 for (int y = 0; y < Columns.GetLength(1); y++)
                 {
                     Columns[i, y] = new GridObject("o", true);
+                }
+            }
+        }
+
+        public void ClearGrid()
+        {
+            for (int i = 0; i < Columns.GetLength(0); i++)
+            {
+                for (int y = 0; y < Columns.GetLength(1); y++)
+                {
+                    if (Columns[i, y].GetChar() == 'C')
+                    {
+                        Columns[i, y] = new GridObject("o", true);
+                    }
                 }
             }
         }

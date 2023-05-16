@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using static AiVisualisation.DepthFirstSearch;
 
 namespace AiVisualisation
 {
@@ -19,7 +20,8 @@ namespace AiVisualisation
             CreateObjects();
             //StartGame();
             //ReturnHome();
-            StartCleaningDFSAI();
+            //StartCleaningDFSAI();
+            StartCleaningRowForRowAI();     
             //StartCleaningRandomAI();
             
         }
@@ -29,16 +31,16 @@ namespace AiVisualisation
             // create console
             DaddyGrid = new Grid();
             // mijn kamer dimensies
-            DaddyGrid.InstantiateGrid(15, 15);
+            DaddyGrid.InstantiateGrid(10, 10);
             og = new ObjectGod(DaddyGrid);
         }
 
         public void CreateObjects()
         {
             // create objects
-            og.InsertObject("Plant", 2, 2);
-            og.InsertObject("Plant", 2, 2);
-            og.InsertObject("Sofa", 6, 2);
+            og.InsertObject("Plant", 1, 1);
+            //og.InsertObject("Plant", 2, 2);
+            //og.InsertObject("Sofa", 6, 2);
         }
 
         public void StartGame()
@@ -101,7 +103,26 @@ namespace AiVisualisation
             DaddyGrid.VisualizeGrid();
             DateTime endTime = DateTime.Now;
             TimeSpan totalTime = endTime - startTime;
+            int returnTiles = ReturnHome();
 
+            Console.WriteLine("Amount of tiles traversed: " + tilesTraversed);
+            Console.WriteLine("Amount of tiles back to base: " + returnTiles);
+            Console.WriteLine("Total Amount of tiles: " + (returnTiles + tilesTraversed));
+            Console.WriteLine("Amount of seconds for algorithm to run in seconds: " + totalTime.TotalSeconds);
+            Console.WriteLine("Amount of seconds for algorithm to run in Minutes: " + totalTime.TotalMinutes);
+        }
+
+
+
+        public void StartCleaningRowForRowAI()
+        {
+            DateTime startTime = DateTime.Now;
+            int tilesTraversed = DepthFirstSearch.DFSCleaningAI(DaddyGrid, Roomba, Roomba.XLoc, Roomba.YLoc);
+            Console.Clear();
+            DaddyGrid.VisualizeGrid();
+
+            DateTime endTime = DateTime.Now;
+            TimeSpan totalTime = endTime - startTime;
 
             int returnTiles = ReturnHome();
 
@@ -112,12 +133,30 @@ namespace AiVisualisation
             Console.WriteLine("Amount of seconds for algorithm to run in Minutes: " + totalTime.TotalMinutes);
         }
 
+
+
+
         public void StartCleaningDFSAI()
         {
             DateTime startTime = DateTime.Now;
-            int tilesTraversed = DepthFirstSearch.DFSCleaningAI(DaddyGrid, Roomba, Roomba.XLoc, Roomba.YLoc);
-            Console.Clear();
             DaddyGrid.VisualizeGrid();
+            List<List<NewNode>> routes = DepthFirstSearch.DFSAI(DaddyGrid,Roomba, Roomba.XLoc, Roomba.YLoc);
+            int tilesTraversed = routes.Count();
+
+            Console.Clear();
+            foreach(List<NewNode> nodeList in routes)
+            {
+                foreach(NewNode node in nodeList)
+                {
+                    DaddyGrid.Columns[node.Column, node.Row] = new GridObject("Clean", false);
+                    
+                }
+                Console.WriteLine(" ");
+                Console.WriteLine(" ");
+                DaddyGrid.VisualizeGrid();
+                DaddyGrid.ClearGrid();
+            }
+
             DateTime endTime = DateTime.Now;
             TimeSpan totalTime = endTime - startTime;
 
