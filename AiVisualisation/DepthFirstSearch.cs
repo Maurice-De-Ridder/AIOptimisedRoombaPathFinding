@@ -76,7 +76,12 @@ namespace AiVisualisation
                         try
                         {
                             Coordinate c = FindNearestDirtyTile(grid, current.Row, current.Column);
-                            TraverseToNearestDirtyTile(grid, c, roomba, current.Row, current.Column);
+                            Coordinate currentCoordinate = new Coordinate { col = current.Column, row = current.Row };
+                            Coordinate newRoombaPosition = TraverseToNearestDirtyTile(grid, c, roomba, currentCoordinate);
+                            newRow = newRoombaPosition.col;
+                            newCol = newRoombaPosition.row;
+                            
+                            
                             dir = 0;
                         }
                         catch(MissingMemberException MSG)
@@ -139,20 +144,21 @@ namespace AiVisualisation
         }
 
 
-        public static void TraverseToNearestDirtyTile(Grid grid, Coordinate dirty,Roomba roomba, int currentX, int currentY)
+        public static Coordinate TraverseToNearestDirtyTile(Grid grid, Coordinate dirty,Roomba roomba, Coordinate current)
         {
 
             //Determines if roomba should traverse left or right.
-            int rowDistance = dirty.row - currentX;
-            int colDistance = dirty.col - currentY;
+            
+            
             for (int x = 0; x < 4; x++)
             {
+                double distanceBefore = CalculateDistance(current, dirty);
                 // 1. traverse in the grid
-                int newPotentialRow = currentX - Directions[x, 1];
-                int newPotentialCol = currentY - Directions[x, 0];
+                int newPotentialRow = current.row + Directions[x, 1];
+                int newPotentialCol = current.col + Directions[x, 0];
+                Coordinate newPotential = new Coordinate { col = newPotentialCol, row = newPotentialRow };
 
-                int potentialRowDistance = dirty.row - newPotentialRow;
-                int potentialColDistance = dirty.col - newPotentialCol;
+                double distanceAfter = CalculateDistance(newPotential, dirty);
 
                 // 2. check if after the traversal the distance has gotten smaller
                 // 2.1 if yes, traverse to that point
@@ -163,46 +169,34 @@ namespace AiVisualisation
                         x = 5;
                     }
                     //Check if distance is Plus or minus
-                    if (rowDistance >= 0 && colDistance > 0 || rowDistance > 0 && colDistance >= 0)
+                    if (distanceAfter < distanceBefore)
                     {
-                        if (potentialRowDistance < rowDistance || potentialColDistance < colDistance)
-                        {
-                            grid.Columns[currentY, currentX] = new GridObject("Clean", false);
-                            grid.Columns[newPotentialCol, newPotentialRow] = roomba.roomba;
+                        grid.Columns[current.col, current.row] = new GridObject("Clean", false);
+                        grid.Columns[newPotentialCol, newPotentialRow] = roomba.roomba;
 
-                            currentY = newPotentialCol;
-                            currentX = newPotentialRow;
-                            Console.Clear();
-                            grid.VisualizeGrid();
-                            if(x != 5)
-                            {
-                                x = 0;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (potentialRowDistance > rowDistance || potentialColDistance > colDistance)
+                        current = newPotential;
+                        Console.Clear();
+                        grid.VisualizeGrid();
+                        if(x != 5)
                         {
-                            grid.Columns[currentY, currentX] = new GridObject("Clean", false);
-                            grid.Columns[newPotentialCol, newPotentialRow] = roomba.roomba;
-
-                            currentY = newPotentialCol;
-                            currentX = newPotentialRow;
-                            Console.Clear();
-                            grid.VisualizeGrid();
-                            if (x != 5)
-                            {
-                                x = 0;
-                            }
+                            x = 0;
                         }
+                        
                     }
-                }
-   
+                }  
                 // 2,2 if no, do nothing 
             }
+            return current;
   
 
+        }
+
+        public static double CalculateDistance(Coordinate coordinateOne, Coordinate coordinateTwo)
+        {
+            int diffX = coordinateOne.row - coordinateTwo.row;
+            int diffY = coordinateOne.col - coordinateTwo.col;
+
+            return Math.Sqrt(diffX * diffX + diffY * diffY);
         }
 
         public static bool CanDoWhileLoop2(Grid grid, int newRow, int newCol)
